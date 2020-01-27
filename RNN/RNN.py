@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 
 
+
 """
 File Reading
 """
@@ -62,7 +63,9 @@ model1.add(Embedding(max_features, embed_size, input_length=maxlen))
 model1.add(Bidirectional(LSTM(128, return_sequences=True)))
 model1.add(GlobalMaxPool1D())
 model1.add(Dense(128, activation='relu'))
+model1.add(Dense(32, activation='relu'))
 model1.add(Dense(16, activation='relu'))
+model1.add(Dense(8, activation='relu'))
 model1.add(Dense(2,activation='softmax'))
 model1.compile(loss='sparse_categorical_crossentropy', optimizer=tf.keras.optimizers.Adam(), metrics=['accuracy'])
 model1.summary()
@@ -77,6 +80,8 @@ x_test = pad_sequences(x_test, maxlen=maxlen)
 
 
 
+
+
 """
 Formats data labels
 """
@@ -86,6 +91,7 @@ def toFinal(a):
             a[i] = 1
         else:
             a[i] = 0
+
 
 
 
@@ -121,6 +127,7 @@ print(y_train.shape)
 print(x_train.shape)
 
 
+
 print(np.count_nonzero(y_train))
 print(y_train.size)
 y_train = y_train[:1500]
@@ -133,6 +140,7 @@ Trains Model
 history = model1.fit(x_train, y_train, epochs=200, batch_size=100)
 
 
+
 def predict(x):
     tokenizer = Tokenizer(num_words=max_features)
     tokenizer.fit_on_texts(list(x))
@@ -143,6 +151,4 @@ def predict(x):
 print(model1.weights)
 
 
-import matplotlib.pyplot as plt
-acc = history.history['loss']
-plt.plot(acc)
+
